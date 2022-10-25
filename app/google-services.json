@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "514721042733",
+    "project_id": "macshutter-52fd5",
+    "storage_bucket": "macshutter-52fd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514721042733:android:706bfd5e39478b456ac3a4",
+        "android_client_info": {
+          "package_name": "com.example.realshit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514721042733-gim0k6ge6fjkv35buu6pdhm88pf2kn2r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.realshit",
+            "certificate_hash": "4231d0c204568cbb33b2bc4f598c3cc2cf3e1452"
+          }
+        },
+        {
+          "client_id": "514721042733-ak8sfbjh5okcv4aisc3j56kdpatgime6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB98JOYNOwJ59o6_pmEVfL8mSVpierRS90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514721042733-ak8sfbjh5okcv4aisc3j56kdpatgime6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

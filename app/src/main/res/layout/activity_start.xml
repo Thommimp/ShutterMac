@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".StartActivity">
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:src="@drawable/icon" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Sign up to #ShareTheMoment"
+            android:textAlignment="center"/>
+
+        <android.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/register"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/button_backgroundblack"
+            android:textColor="@color/white"
+            android:text="Register"
+            android:textAllCaps="false" />
+
+        <android.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="10dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/button_backgroundred"
+            android:textColor="@color/white"
+            android:text="Already have an account? Sign in"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+</RelativeLayout>
