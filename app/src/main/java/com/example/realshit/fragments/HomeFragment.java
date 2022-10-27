@@ -2,22 +2,110 @@ package com.example.realshit.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.realshit.Model.Post;
 import com.example.realshit.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import Adapter.PostAdapter;
 
 public class HomeFragment extends Fragment {
+
+    private RecyclerView recyclerViewPosts;
+    private PostAdapter postAdapter;
+    private List<Post> postList;
+
+    private List<String> followingList;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        recyclerViewPosts = view.findViewById(R.id.recycler_view_posts);
+        recyclerViewPosts.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
+        recyclerViewPosts.setLayoutManager(linearLayoutManager);
+        postList = new ArrayList<>();
+        postAdapter = new PostAdapter(getContext(), postList);
+        recyclerViewPosts.setAdapter(postAdapter);
+
+
+        checkFollowingUsers();
+        return view;
+
+    }
+
+    private void checkFollowingUsers() {
+        followingList = new ArrayList<>();
+        CollectionReference reference = FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .collection("following");
+        reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                followingList.clear();
+                for (DocumentSnapshot ds: task.getResult()) {
+                    followingList.add(ds.getString("followid"));
+                }
+                readPosts();
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void readPosts() {
+        Task<QuerySnapshot> ref = FirebaseFirestore.getInstance().collection("posts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        postList.clear();
+                        for (DocumentSnapshot ds: task.getResult()){
+                            Post post = ds.toObject(Post.class);
+
+                            for (String id : followingList) {
+                                if (post.getUser().equals(id)) {
+                                    postList.add(post);
+                                }
+                            }
+                        }
+                        postAdapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "shakalaka", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -148,18 +149,21 @@ public class PostActivity extends AppCompatActivity {
 
                     String generatedFilePath = downloadUri.toString();
                     String txtdescription = mDescription.getText().toString();
-                    DocumentReference documentReference = firestore.collection("users").document(mAuth.getCurrentUser().getUid());
-                    DocumentReference ref = documentReference.collection("posts").document(fileName);
+                    DocumentReference documentReference = firestore.collection("posts").document();
+                   // DocumentReference ref = documentReference.collection("posts").document(fileName);
+                    String postid = documentReference.getId();
                    
 
                     
                     Map<String, Object> map = new HashMap<>();
                     map.put("Imageurl", generatedFilePath);
                     map.put("time", fileName);
+                    map.put("postid", postid);
                     map.put("user", mAuth.getCurrentUser().getUid());
                     map.put("description", txtdescription);
 
-                    ref.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    //DocumentReference df = cdocumentReference.document(postid);
+                            documentReference.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(PostActivity.this, "Upload successful!", Toast.LENGTH_SHORT).show();

@@ -16,9 +16,12 @@ import com.example.realshit.Model.Post;
 import com.example.realshit.Model.User;
 import com.example.realshit.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -53,13 +56,44 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Post post = mPosts.get(position);
+        final Post post = mPosts.get(position);
         Picasso.get().load(post.getImageurl()).into(holder.post_image);
-        holder.desciption.setText(post.getDescription());
 
-        FirebaseFirestore.getInstance().collection("Users").document(post.getUser()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+      // if (post.getDescription().equals(" ")) {
+      //     holder.desciption.setVisibility(View.GONE);
+      // } else {
+      //     holder.desciption.setVisibility(View.VISIBLE);
+      //
+
+      // }
+        holder.desciption.setText(post.getDescription());
+        publisherinfo(holder.username, post.getUser());
+
+
+
+
+     //  FirebaseFirestore.getInstance().collection("Users").document(post.getUser()).collection("posts")
+     //          .document(post.getTime()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+     //              @Override
+     //              public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+     //
+     //              }
+     //          })
+
+
+    }
+
+    private void publisherinfo (final TextView username, String userid) {
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("users").document(userid);
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                username.setText(user.getUsername());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
             }
         });

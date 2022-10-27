@@ -6,6 +6,7 @@ public class Post {
     private String Imageurl;
     private String time;
     private String user;
+    private String postid;
 
    public Post() {
 
@@ -41,5 +42,13 @@ public class Post {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getPostid() {
+        return postid;
+    }
+
+    public void setPostid(String postid) {
+        this.postid = postid;
     }
 }
