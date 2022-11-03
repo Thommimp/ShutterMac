@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.realshit.Model.Post;
@@ -21,12 +23,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapter.PostAdapter;
+import com.example.realshit.Adapter.PostAdapter;
 
 public class HomeFragment extends Fragment {
 
@@ -37,10 +40,14 @@ public class HomeFragment extends Fragment {
     private List<String> followingList;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+       // getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerViewPosts = view.findViewById(R.id.recycler_view_posts);
@@ -84,8 +91,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void readPosts() {
-        Task<QuerySnapshot> ref = FirebaseFirestore.getInstance().collection("posts")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<QuerySnapshot> ref = FirebaseFirestore.getInstance().collection("posts").orderBy("time").get();
+                ref.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         postList.clear();
@@ -96,6 +103,7 @@ public class HomeFragment extends Fragment {
                                 if (post.getUser().equals(id)) {
                                     postList.add(post);
                                 }
+
                             }
                         }
                         postAdapter.notifyDataSetChanged();
@@ -107,5 +115,21 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
+
+  // private void order() {
+  //     CollectionReference ref = FirebaseFirestore.getInstance().collection("posts");
+
+  //     Query query = ref.orderBy("time");
+  //     query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+  //         @Override
+  //         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+  //             for (DocumentSnapshot ds: task.getResult()) {
+  //                 postList.add(ds.getString("time"));
+  //             }
+  //
+  //         }
+  //     });
+  // }
+
 
 }

@@ -1,7 +1,6 @@
-package Adapter;
+package com.example.realshit.Adapter;
 
 import android.content.Context;
-import android.service.autofill.UserData;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

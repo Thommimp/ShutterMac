@@ -107,6 +107,10 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (imageUri!= null) {
+                    Intent intent = new Intent(PostActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
                     uploadImage();
                 }
                 else {
@@ -162,15 +166,14 @@ public class PostActivity extends AppCompatActivity {
                     map.put("user", mAuth.getCurrentUser().getUid());
                     map.put("description", txtdescription);
 
+
+
                     //DocumentReference df = cdocumentReference.document(postid);
                             documentReference.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(PostActivity.this, "Upload successful!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(PostActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                             startActivity(intent);
-                             finish();
+
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
